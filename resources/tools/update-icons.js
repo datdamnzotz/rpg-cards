@@ -1,10 +1,10 @@
 const mv = require('mv');
-const fs = require('fs');
+const fs = require('graceful-fs');
 const fse = require('fs-extra');
 const http = require('https');
 const path = require('path');
 const walk = require('walk');
-const unzip = require('unzip');
+const unzip = require('unzipper');
 const child_process = require('child_process');
 const ncp = require('ncp');
 
@@ -43,7 +43,7 @@ function unzipAll(src, dest) {
     return new Promise((resolve, reject) => {
         fs.createReadStream(tempFilePath)
         .pipe(unzip.Parse())
-        .on('entry', entry => {
+        .on('entry', function(entry) {
             const fileName = entry.path;
             const baseName = path.basename(fileName);
             const type = entry.type;
@@ -170,10 +170,10 @@ function copyAll(src, dest) {
 fse.emptyDir(tempDir)
 .then(() => downloadFile(gameIconsUrl, tempFilePath))
 .then(() => unzipAll(tempFilePath, tempDir))
-.then(() => copyAll(tempDir, imgDir))
-.then(() => copyAll(customIconDir, imgDir))
-.then(() => processAll(imgDir))
-.then(() => generateCSS(imgDir, cssPath))
-.then(() => generateJS(imgDir, jsPath))
+// .then(() => copyAll(tempDir, imgDir))
+// .then(() => copyAll(customIconDir, imgDir))
+// .then(() => processAll(imgDir))
+// .then(() => generateCSS(imgDir, cssPath))
+// .then(() => generateJS(imgDir, jsPath))
 .then(() => console.log("Done."))
 .catch(err => console.log("Error", err));
