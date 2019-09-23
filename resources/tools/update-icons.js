@@ -1,14 +1,14 @@
 const mv = require('mv');
 const fs = require('graceful-fs');
 const fse = require('fs-extra');
-const http = require('https');
+const request = require('request');
 const path = require('path');
 const walk = require('walk');
 const unzip = require('unzipper');
 const child_process = require('child_process');
 const ncp = require('ncp');
 
-const gameIconsUrl = "https://game-icons.net/archives/png/zip/ffffff/000000/game-icons.net.png.zip";
+const gameIconsUrl = "https://game-icons.net/archives/png/zip/000000/ffffff/game-icons.net.png.zip";
 const tempFilePath = "./temp.zip";
 const tempDir = "./temp";
 const imgDir = "./generator/img";
@@ -25,13 +25,7 @@ const processIconsCmd = `mogrify -alpha copy -channel-fx "red=100%, blue=100%, g
 function downloadFile(url, dest) {
     console.log("Downloading...");
     return new Promise((resolve, reject) => {
-        http.get(url, response => {
-            const file = fs.createWriteStream(dest);
-            response.pipe(file);
-            file.on('close', resolve);
-            file.on('error', reject);
-        })
-        .on('error', reject);
+        request(url).pipe(fs.createWriteStream(dest)).on('error', reject).on('close', resolve);
     });
 }
 
@@ -170,10 +164,10 @@ function copyAll(src, dest) {
 fse.emptyDir(tempDir)
 .then(() => downloadFile(gameIconsUrl, tempFilePath))
 .then(() => unzipAll(tempFilePath, tempDir))
-// .then(() => copyAll(tempDir, imgDir))
-// .then(() => copyAll(customIconDir, imgDir))
-// .then(() => processAll(imgDir))
-// .then(() => generateCSS(imgDir, cssPath))
-// .then(() => generateJS(imgDir, jsPath))
+.then(() => copyAll(tempDir, imgDir))
+.then(() => copyAll(customIconDir, imgDir))
+.then(() => processAll(imgDir))
+.then(() => generateCSS(imgDir, cssPath))
+.then(() => generateJS(imgDir, jsPath))
 .then(() => console.log("Done."))
 .catch(err => console.log("Error", err));

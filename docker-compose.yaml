@@ -18,3 +18,17 @@ services:
         published: 8080
         protocol: tcp
         mode: host
+  dev:
+    build:
+      context: 'resources/tools'
+    volumes:
+      - type: bind
+        source: ./generator
+        target: /opt/app/generator
+      - type: bind
+        source: ./resources
+        target: /opt/app/resources
+    entrypoint: 
+      - tail 
+      - -f 
+      - /dev/null
