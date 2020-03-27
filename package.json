@@ -4,13 +4,14 @@
   "description": "RPG card generator",
   "main": "generator/generate.html",
   "devDependencies": {
-    "fs-extra": "^3.0.0",
+    "graceful-fs": "4.2.2",
+    "fs-extra": "^8.1.0",
     "mv": "^2.1.1",
-    "promise-streams": "^1.0.1",
-    "request": "^2.81.0",
-    "request-promise-native": "^1.0.3",
-    "unzip": "^0.1.11",
-    "walk": "^2.3.9"
+    "promise-streams": "^2.1.1",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "unzipper": "^0.10.5",
+    "walk": "^2.3.14"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
