@@ -162,11 +162,10 @@ function copyAll(src, dest) {
 }
 
 fse.emptyDir(tempDir)
-//.then(() => downloadFile(gameIconsUrl, tempFilePath))
+.then(() => downloadFile(gameIconsUrl, tempFilePath))
 .then(() => unzipAll(tempFilePath, tempDir))
 .then(() => copyAll(tempDir, imgDir))
 .then(() => copyAll(customIconDir, imgDir))
-
 .then(() => generateCSS(imgDir, cssPath))
 .then(() => generateJS(imgDir, jsPath))
 .then(() => console.log("Done."))
